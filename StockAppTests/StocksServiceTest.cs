@@ -1,297 +1,292 @@
+using AutoFixture;
+using Entities;
+using FluentAssertions;
+using Moq;
+using RepositoryContracts;
 using ServiceContracts;
 using ServiceContracts.DTO;
 using Services;
+using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace StockAppTests
 {
     public class StocksServiceTest
     {
-        //private readonly IStocksService _stocksService;
-        //private readonly ITestOutputHelper _testOutputHelper;
+        private readonly IStocksService _stocksService;
+        private readonly Mock<IStocksRepository> _stocksRepositoryMock;
+        private readonly IStocksRepository _stocksRepository;
 
-        //public StocksServiceTest(ITestOutputHelper testOutputHelper)
-        //{
-        //    _stocksService = new StocksService();
-        //    _testOutputHelper = testOutputHelper;
-        //}
+        private readonly IFixture _fixture;
 
-        //private BuyOrderRequest GetBuyOrderRequest()
-        //{
-        //    return new BuyOrderRequest()
-        //    {
-        //        StockSymbol = "AAPL",
-        //        StockName = "Apple Inc.",
-        //        DateTimeOrder = DateTime.Now,
-        //        Quantity = 10,
-        //        Price = 150.00
-        //    };
-        //}
+        private readonly ITestOutputHelper _testOutputHelper;
 
-        //private SellOrderRequest GetSellOrderRequest()
-        //{
-        //    return new SellOrderRequest()
-        //    {
-        //        StockSymbol = "AAPL",
-        //        StockName = "Apple Inc.",
-        //        DateTimeOrder = DateTime.Now,
-        //        Quantity = 10,
-        //        Price = 150.00
-        //    };
-        //}
+        public StocksServiceTest(ITestOutputHelper testOutputHelper)
+        {
+            _fixture = new Fixture();
+            _stocksRepositoryMock = new Mock<IStocksRepository>();
+            _stocksRepository = _stocksRepositoryMock.Object;
 
-        //private List<BuyOrderRequest> GetMultipleBuyOrderRequest()
-        //{
-        //    return new List<BuyOrderRequest>()
-        //    {
-        //        new BuyOrderRequest() {
-        //        StockSymbol = "AAPL",
-        //        StockName = "Apple Inc.",
-        //        DateTimeOrder = DateTime.Now,
-        //        Quantity = 10,
-        //        Price = 150.00
-        //        },
-        //        new BuyOrderRequest() {
-        //            StockSymbol = "GOOGL",
-        //            StockName = "Alphabet Inc.",
-        //            DateTimeOrder = DateTime.Now,
-        //            Price = 2800.00,
-        //            Quantity = 5
-        //        },
-        //    };
-        //}
+            _stocksService = new StocksService(_stocksRepositoryMock.Object);
+            _testOutputHelper = testOutputHelper;
+        }
 
-        //private List<SellOrderRequest> GetMultipleSellOrderRequest()
-        //{
-        //    return new List<SellOrderRequest>()
-        //    {
-        //        new SellOrderRequest(){
-        //        StockSymbol = "AAPL",
-        //        StockName = "Apple Inc.",
-        //        DateTimeOrder = DateTime.Now,
-        //        Quantity = 10,
-        //        Price = 150.00
-        //        },
-        //        new SellOrderRequest(){
-        //            StockSymbol = "GOOGL",
-        //            StockName = "Alphabet Inc.",
-        //            DateTimeOrder = DateTime.Now,
-        //            Price = 2800.00,
-        //            Quantity = 5
-        //        },
+        #region CreateBuyOrder
+        //When supply a null BuyOrderRequest, it should throw an ArgumentNullException
+        [Fact]
+        public async Task CreateBuyOrder_NullBuyOrderRequest()
+        {
+            BuyOrderRequest? buyOrderRequest = null;
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        //    };
-        //}
+            await action.Should().ThrowAsync<ArgumentNullException>();
+        }
 
+        //When supply BuyOrderRequest with less quantity than min required (0), it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_QuantityZero()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                .With(x => x.Quantity, (uint)0)
+                .Create();
 
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        //#region CreateBuyOrder
-        ////When supply a null BuyOrderRequest, it should throw an ArgumentNullException
-        //[Fact]
-        //public void CreateBuyOrder_NullBuyOrderRequest()
-        //{
-        //    BuyOrderRequest? buyOrderRequest = null;
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.ThrowsAsync<ArgumentNullException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+        //When supply BuyOrderRequest with too much quantity (more than 100000), it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_QuantityTooHigh()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                 .With(x => x.Quantity, (uint)100001)
+                 .Create();
 
-        ////When supply BuyOrderRequest with less quantity than min required (0), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_QuantityZero()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.Quantity = 0;
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        ////When supply BuyOrderRequest with too much quantity (more than 100000), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_QuantityTooHigh()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.Quantity = 100001;
+        //When supply BuyOrderRequest with a price too low (less than 1), it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_PriceTooLow()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                 .With(x => x.Price, 0f)
+                 .Create();
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        ////When supply BuyOrderRequest with a price too low (less than 1), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_PriceTooLow()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.Price = 0;
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+        //When supply BuyOrderRequest with a price too high (more than 100000), it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_PriceTooHigh()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                 .With(x => x.Price, 100001f)
+                 .Create();
 
-        ////When supply BuyOrderRequest with a price too high (more than 100000), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_PriceTooHigh()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.Price = 100001;
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        ////When supply BuyOrderRequest with a null stockSymbol, it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_NoStockSymbol()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.StockSymbol = "";
+        //When supply BuyOrderRequest with a null stockSymbol, it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_NoStockSymbol()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                 .With(x => x.StockSymbol, null as string)
+                 .Create();
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        ////When supply BuyOrderRequest with a null stockSymbol, it should throw an ArgumentException
-        //[Fact]
-        //public void CreateBuyOrder_OlderDateThanAuthorized()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
-        //    buyOrderRequest.DateTimeOrder = DateTime.Parse("1999-12-31");
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateBuyOrder(buyOrderRequest);
-        //    });
-        //}
+        //When supply BuyOrderRequest with a null stockSymbol, it should throw an ValidationException
+        [Fact]
+        public async Task CreateBuyOrder_OlderDateThanAuthorized()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
+                .With(x => x.DateTimeOrder, DateTime.Parse("1999-12-31"))
+                .Create();
 
-        ////When supply BuyOrderRequest with correct values, it should return a BuyOrderResponse with auto-generated ID
-        //[Fact]
-        //public async void CreateBuyOrder_CorrectValues()
-        //{
-        //    BuyOrderRequest buyOrderRequest = GetBuyOrderRequest();
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateBuyOrder(buyOrderRequest);
+            };
 
-        //    BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.NotNull(buyOrderResponse);
-        //    Assert.True(buyOrderResponse.BuyOrderID != Guid.Empty);
-        //}
-        //#endregion
+        //When supply BuyOrderRequest with correct values, it should return a BuyOrderResponse with auto-generated ID
+        [Fact]
+        public async Task CreateBuyOrder_CorrectValues()
+        {
+            BuyOrderRequest buyOrderRequest = _fixture.Create<BuyOrderRequest>();
+            BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
+            BuyOrderResponse buyOrderResponseExpected = buyOrder.ToBuyOrderResponse();
 
-        //#region CreateSellOrder
-        ////When supply a null SellOrderRequest, it should throw an ArgumentNullException
-        //[Fact]
-        //public void CreateSellOrder_NullBuyOrderRequest()
-        //{
-        //    SellOrderRequest? sellOrderRequest = null;
+            _stocksRepositoryMock.Setup(temp => temp.CreateBuyOrder(It.IsAny<BuyOrder>())).ReturnsAsync(buyOrder);
+            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            buyOrderResponseExpected.BuyOrderID = buyOrderResponse.BuyOrderID;
 
-        //    Assert.ThrowsAsync<ArgumentNullException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+            buyOrderResponse.Should().NotBeNull();
+            buyOrderResponse.BuyOrderID.Should().NotBe(Guid.Empty);
+            buyOrderResponse.Should().BeEquivalentTo(buyOrderResponseExpected);
+        }
+        #endregion
 
-        ////When supply SellOrderRequest with less quantity than min required (0), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_QuantityZero()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.Quantity = 0;
+        #region CreateSellOrder
+        //When supply a null SellOrderRequest, it should throw an ArgumentNullException
+        [Fact]
+        public async Task CreateSellOrder_NullBuyOrderRequest()
+        {
+            SellOrderRequest? sellOrderRequest = null;
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
 
-        ////When supply SellOrderRequest with too much quantity (more than 100000), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_QuantityTooHigh()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.Quantity = 100001;
+            await action.Should().ThrowAsync<ArgumentNullException>();
+        }
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+        //When supply SellOrderRequest with less quantity than min required (0), it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_QuantityZero()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+                .With(x => x.Quantity, (uint)0)
+                .Create();
 
-        ////When supply SellOrderRequest with a price too low (less than 1), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_PriceTooLow()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.Price = 0;
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        ////When supply SellOrderRequest with a price too high (more than 100000), it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_PriceTooHigh()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.Price = 100001;
+        //When supply SellOrderRequest with too much quantity (more than 100000), it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_QuantityTooHigh()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+               .With(x => x.Quantity, (uint)100001)
+               .Create();
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
 
-        ////When supply SellOrderRequest with a null stockSymbol, it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_NoStockSymbol()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.StockSymbol = "";
+            await action.Should().ThrowAsync<ValidationException>();
+        }
+        //When supply SellOrderRequest with a price too low (less than 1), it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_PriceTooLow()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+               .With(x => x.Price, 0f)
+               .Create();
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
 
-        ////When supply SellOrderRequest with a null stockSymbol, it should throw an ArgumentException
-        //[Fact]
-        //public void CreateSellOrder_OlderDateThanAuthorized()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
-        //    sellOrderRequest.DateTimeOrder = DateTime.Parse("1999-12-31");
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.ThrowsAsync<ArgumentException>(async () =>
-        //    {
-        //        await _stocksService.CreateSellOrder(sellOrderRequest);
-        //    });
-        //}
+        //When supply SellOrderRequest with a price too high (more than 100000), it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_PriceTooHigh()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+              .With(x => x.Quantity, 100001f)
+              .Create();
 
-        ////When supply SellOrderRequest with correct values, it should return a SellOrderResponse with auto-generated ID
-        //[Fact]
-        //public async void CreateSellOrder_CorrectValues()
-        //{
-        //    SellOrderRequest sellOrderRequest = GetSellOrderRequest();
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
 
-        //    SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            await action.Should().ThrowAsync<ValidationException>();
+        }
 
-        //    Assert.NotNull(sellOrderResponse);
-        //    Assert.True(sellOrderResponse.SellOrderID != Guid.Empty);
-        //}
-        //#endregion
+        //When supply SellOrderRequest with a null stockSymbol, it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_NoStockSymbol()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+               .With(x => x.StockSymbol, null as string)
+               .Create();
+
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
+
+            await action.Should().ThrowAsync<ValidationException>();
+        }
+
+        //When supply SellOrderRequest with a null stockSymbol, it should throw an ValidationException
+        [Fact]
+        public async Task CreateSellOrder_OlderDateThanAuthorized()
+        {
+            SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
+               .With(x => x.DateTimeOrder, DateTime.Parse("1999-12-31"))
+               .Create();
+
+            Func<Task> action = async () =>
+            {
+                await _stocksService.CreateSellOrder(sellOrderRequest);
+            };
+
+            await action.Should().ThrowAsync<ValidationException>();
+        }
+
+        //When supply SellOrderRequest with correct values, it should return a SellOrderResponse with auto-generated ID
+        [Fact]
+        public async void CreateSellOrder_CorrectValues()
+        {
+            SellOrderRequest sellOrderRequest = _fixture.Create<SellOrderRequest>();
+            SellOrder sellOrder = sellOrderRequest.ToSellOrder();
+            SellOrderResponse sellOrderResponseExpected = sellOrder.ToSellOrderResponse();
+
+            _stocksRepositoryMock.Setup(temp => temp.CreateSellOrder(It.IsAny<SellOrder>())).ReturnsAsync(sellOrder);
+            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            sellOrderResponseExpected.SellOrderID = sellOrderResponse.SellOrderID;
+
+            sellOrderResponse.Should().NotBeNull();
+            sellOrderResponse.SellOrderID.Should().NotBe(Guid.Empty);
+            sellOrderResponse.Should().BeEquivalentTo(sellOrderResponseExpected);
+        }
+        #endregion
 
         //#region GetBuyOrders
         ////By default GetBuyOrders should return an empty list

@@ -16,12 +16,19 @@ builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
 builder.Services.AddScoped<IStocksRepository, StocksRepository>();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 var app = builder.Build();
 
-Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", "Rotativa");
+if (!builder.Environment.IsEnvironment("Test"))
+{
+    Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", "Rotativa");
+}
 
 app.UseStaticFiles();
 app.UseRouting();
@@ -29,3 +36,5 @@ app.MapControllers();
 
 
 app.Run();
+
+public partial class Program { }
