@@ -1,0 +1,49 @@
+﻿@model StockTrade
+@{
+	ViewBag.Title = "Trade";
+}
+
+<div class="ml pb text-grey">Stocks  <i class="fa-solid fa-caret-right"></i> @(Model.StockName)</div>
+
+<form method="post">
+	<div class="flex box trading-panel">
+		<div class="stock" id="stock-price-panel">
+			<h2 class="stock-title">@(Model.StockName) (@Model.StockSymbol)</h2>
+			<div class="stock-price"><small class="text-grey">$ </small><span id="stock-price">@(Model.Price)</span></div>
+		</div>
+		<div class="trading-panel-flex" id="new-order-panel">
+			<h3 class="text-grey mb">New Order</h3>
+			<label for="Quantity" class="mt">Quantity:</label>
+			<div class="w-25">
+				<input type="number" name="Quantity" id="Quantity" class="form-input mb" value="@(ViewBag.DefaultQuantity)"
+					   min="1" max="100000" required />
+			</div>
+			<div class="button-panel">
+				<button type="submit" formaction="~/trade/sellorder" class="button button-red-back trading-button"><i class="fa-solid fa-arrow-down pr"></i>Sell</button>
+				<button type="submit" formaction="~/trade/buyorder" class="button button-green-back trading-button"><i class="fa-solid fa-arrow-up pr"></i>Buy</button>
+				@if (ViewBag.Errors != null)
+				{
+					<div class="text-red ml">
+						<ul>
+							@foreach (string error in ViewBag.Errors)
+							{
+								<li class="ml">@error</li>
+							}
+						</ul>
+					</div>
+				}
+			</div>
+		</div>
+	</div>
+
+	<div hidden id="token" data-value="@(ViewBag.Token)"></div>
+	<input hidden asp-for="StockSymbol" />
+	<input hidden asp-for="Price" />
+	<input hidden asp-for="StockName" />
+</form>
+@section Scripts {
+	<script src="~/Scripts/script.js"></script>
+}
+
+
+

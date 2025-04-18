@@ -1,0 +1,42 @@
+﻿@model Orders
+@{
+	Layout = null;
+}
+<link href="@("http://" + Context.Request.Host.ToString() + "/StyleSheet.css")" rel="stylesheet" />
+<h1>Orders</h1>
+<table class="table w-100 mt">
+	<thead>
+		<tr>
+			<th>Date and time</th>
+			<th>Stock</th>
+			<th>Order Type</th>
+			<th>Quantity</th>
+			<th>Price</th>
+			<th>Trade amount</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var order in Model.SellOrders)
+		{
+			<tr>
+				<td>@order.DateTimeOrder.ToString("dd MMMM yyyy hh:mm:ss tt")</td>
+				<td>@order.StockName (@order.StockSymbol)</td>
+				<td>SellOrder</td>
+				<td>@order.Quantity</td>
+				<td>@order.Price</td>
+				<td>@order.TradeAmount</td>
+			</tr>
+		}
+		@foreach (var order in Model.BuyOrders)
+		{
+			<tr>
+				<td>@order.DateTimeOrder.ToString("dd MMMM yyyy hh:mm:ss tt")</td>
+				<td>@order.StockName (@order.StockSymbol)</td>
+				<td>BuyOrder</td>
+				<td>@order.Quantity</td>
+				<td>@order.Price</td>
+				<td>@order.TradeAmount.ToString("0.00")</td>
+			</tr>
+		}
+	</tbody>
+</table>

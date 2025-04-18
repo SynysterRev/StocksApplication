@@ -1,0 +1,34 @@
+﻿@model List<Stock>
+@{
+	ViewBag.Title = "Explore Stocks";
+}
+
+<div class="ml pb text-grey">Stocks  <i class="fa-solid fa-caret-right"></i> Explore</div>
+
+<div class="flex">
+	<div class="box stocks-list">
+		<div class="flex m">
+			<h3 class="text-grey mt flex-1">Stocks</h3>
+			<a class="mt flex-1 text-right" href="">Show all stocks</a>
+		</div>
+		<div class="list-container stocks-list" id="stocks-list">
+			<ul class="list m">
+				@foreach (Stock stock in Model)
+				{
+					<li>
+						<a asp-controller="Stocks" asp-action="Explore" asp-route-stock="@stock.StockSymbol">
+							<h2>@stock.StockName</h2>
+							<h4 class="text-grey">(@stock.StockSymbol)</h4>
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</div>
+	@if (!String.IsNullOrEmpty(ViewBag.Stock))
+	{
+		<div class="container">
+			@await Component.InvokeAsync("SelectedStock", ViewBag.Stock)
+		</div>
+	}
+</div>

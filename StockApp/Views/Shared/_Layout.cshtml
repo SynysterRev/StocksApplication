@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>@ViewBag.Title</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+		  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+		  crossorigin="anonymous" referrerpolicy="no-referrer" />
+	<link href="~/StyleSheet.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="container">
+		<div class="page-content">
+			<div class="margin-bottom">
+				<div class="flex" id="top-bar-div">
+					<div class="flex 1" id="app-title-div">
+						<h1 class="app-title">
+							<i class="fa-solid fa-money-bill-trend-up"></i>
+							Stocks
+						</h1>
+					</div>
+
+					<div class="flex-1 pr" id="search-box-div">
+						<input type="search" placeholder="Search Stocks" name="SearchText" id="search-stocks" class="search-text" />
+						<i class="fa-solid fa-gear pt"></i>
+						<button class="button-blue-back login-button button ml">Login</button>
+					</div>
+
+				</div>
+				<div class="mt navbar">
+					<ul>
+						<li>
+							<a asp-controller="Trade" asp-action="Index" class="@(ViewBag.CurrentPage == "Trade" ? "nav-active" : "")">Trade</a>
+							<a asp-controller="Trade" asp-action="Orders" class="@(ViewBag.CurrentPage == "Orders" ? "nav-active" : "")">Orders</a>
+							<a asp-controller="Trade" asp-action="OrdersPDF">Orders to PDF</a>
+						</li>
+					</ul>	
+				</div>
+				<div>
+					@RenderBody()
+				</div>
+			</div>
+		</div>
+	</div>
+	@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

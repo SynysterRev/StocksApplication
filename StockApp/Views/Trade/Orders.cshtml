@@ -1,0 +1,50 @@
+﻿@model Orders
+@{
+	ViewBag.Title = "Orders";
+}
+
+<div class="ml pb text-grey">Stocks  <i class="fa-solid fa-caret-right"></i> Orders</div>
+<div class="flex orders-list">
+	<div id="buy-orders-list">
+		<div class="box">
+			<h3 class="text-grey mb">Buy Orders</h3>
+			@if(Model.BuyOrders.Count == 0)
+			{
+				<h4>No orders</h4>
+			}
+			@foreach (BuyOrderResponse orderResponse in Model.BuyOrders)
+			{
+				@await Html.PartialAsync("_OrderDescription", new ViewDataDictionary(ViewData)
+			{
+			{"StockName", orderResponse.StockName},
+			{"StockSymbol", orderResponse.StockSymbol},
+			{"Quantity", orderResponse.Quantity},
+			{"Price", orderResponse.Price},
+			{"TradeAmount", orderResponse.TradeAmount},
+			{"OrderDate", orderResponse.DateTimeOrder.ToString("dd MMMM yyyy hh:mm:ss tt")},
+			})
+			}
+		</div>
+	</div>
+	<div id="sell-orders-list">
+		<div class="box">
+			<h3 class="text-grey mb">Sell Orders</h3>
+			@if (Model.SellOrders.Count == 0)
+			{
+				<h4>No orders</h4>
+			}
+			@foreach (SellOrderResponse orderResponse in Model.SellOrders)
+			{
+				@await Html.PartialAsync("_OrderDescription", new ViewDataDictionary(ViewData)
+			{
+			{"StockName", orderResponse.StockName},
+			{"StockSymbol", orderResponse.StockSymbol},
+			{"Quantity", orderResponse.Quantity},
+			{"Price", orderResponse.Price},
+			{"TradeAmount", orderResponse.TradeAmount},
+			{"OrderDate", orderResponse.DateTimeOrder.ToString("dd MMMM yyyy hh:mm:ss tt")},
+			})
+			}
+		</div>
+	</div>
+</div>
