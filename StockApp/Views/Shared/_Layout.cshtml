@@ -31,7 +31,8 @@
 				<div class="mt navbar">
 					<ul>
 						<li>
-							<a asp-controller="Trade" asp-action="Index" class="@(ViewBag.CurrentPage == "Trade" ? "nav-active" : "")">Trade</a>
+							<a asp-controller="Stocks" asp-action="Explore" class="@(ViewBag.CurrentPage == "Explore" ? "nav-active" : "")">Explore</a>
+							<a asp-controller="Trade" asp-action="Index" asp-route-stockSymbol="MSFT" class="@(ViewBag.CurrentPage == "Trade" ? "nav-active" : "")">Trade</a>
 							<a asp-controller="Trade" asp-action="Orders" class="@(ViewBag.CurrentPage == "Orders" ? "nav-active" : "")">Orders</a>
 							<a asp-controller="Trade" asp-action="OrdersPDF">Orders to PDF</a>
 						</li>

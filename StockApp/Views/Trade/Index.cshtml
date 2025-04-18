@@ -9,7 +9,7 @@
 	<div class="flex box trading-panel">
 		<div class="stock" id="stock-price-panel">
 			<h2 class="stock-title">@(Model.StockName) (@Model.StockSymbol)</h2>
-			<div class="stock-price"><small class="text-grey">$ </small><span id="stock-price">@(Model.Price)</span></div>
+			<div class="stock-price"><small class="text-grey">$ </small><span id="stock-price">@(Model.Price.ToString("N"))</span></div>
 		</div>
 		<div class="trading-panel-flex" id="new-order-panel">
 			<h3 class="text-grey mb">New Order</h3>
@@ -36,6 +36,7 @@
 		</div>
 	</div>
 
+	@*Not a good practice, but this token is not really secret*@
 	<div hidden id="token" data-value="@(ViewBag.Token)"></div>
 	<input hidden asp-for="StockSymbol" />
 	<input hidden asp-for="Price" />

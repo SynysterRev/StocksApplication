@@ -36,6 +36,7 @@ namespace StockApp.Controllers
                 stocks = stocks.Select(x => x).Where(x => defaultStockSymbol.Contains(x.StockSymbol)).ToList();
             }
             ViewBag.Stock = stock;
+            ViewBag.CurrentPage = "Explore";
             return View(stocks);
         }
     }

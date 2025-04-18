@@ -3,6 +3,6 @@
 	<h3>@ViewBag.StockName (@ViewBag.StockSymbol)</h3>
 	<div class="pill w-25 text-center">@ViewBag.Industry</div>
 	<h4>Exchange: <span class="pill ">@ViewBag.Exchange</span></h4>
-	<h1 class="p" style="font-size: 50px"><span class="text-grey">$</span> @ViewBag.Price</h1>
-	<button type="button" formaction="~/trade/Index" class="button button-blue-back w-25 mt">Trade Now</button>
+	<h1 class="p" style="font-size: 50px"><span class="text-grey">$</span> @ViewBag.Price.ToString("N")</h1>
+	<a asp-controller="Trade" asp-action="Index" asp-route-stockSymbol="@ViewBag.StockSymbol" class="button button-link button-blue-back mt trading-button">Trade Now</a>
 </div>
