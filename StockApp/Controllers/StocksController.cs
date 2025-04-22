@@ -28,8 +28,7 @@ namespace StockApp.Controllers
             {
                 return StatusCode(500, "Can't access finnhub servers");
             }
-            List<Stock> stocks = new List<Stock>();
-            stocks = stocksListDic.Select(x => new Stock() { StockSymbol = x["displaySymbol"], StockName = x["description"] }).ToList();
+            List<Stock> stocks = stocksListDic.Select(x => new Stock() { StockSymbol = x["displaySymbol"], StockName = x["description"] }).ToList();
             if (!string.IsNullOrEmpty(_tradingOptions.Value.Top25PopularStocks))
             {
                 string[] defaultStockSymbol = _tradingOptions.Value.Top25PopularStocks.Split(',');
