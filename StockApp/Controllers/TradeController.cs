@@ -26,7 +26,7 @@ namespace StockApp.Controllers
         }
 
         [HttpGet]
-        [Route("[action]/{stock?}")]
+        [Route("[action]/{stockSymbol?}")]
         public async Task<IActionResult> Index(string? stockSymbol)
         {
             if (string.IsNullOrEmpty(stockSymbol))
