@@ -73,52 +73,35 @@ namespace StockApp.Controllers
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> BuyOrder(BuyOrderRequest buyOrderRequest)
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest orderRequest)
         {
-            buyOrderRequest.DateTimeOrder = DateTime.Now;
+            orderRequest!.DateAndTimeOfOrder = DateTime.Now;
 
             ModelState.Clear();
-            TryValidateModel(buyOrderRequest);
+            TryValidateModel(orderRequest);
             if (!ModelState.IsValid)
             {
                 ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).ToList().Select(e => e.ErrorMessage).ToList();
                 StockTrade stockTrade = new StockTrade()
                 {
-                    StockSymbol = buyOrderRequest.StockSymbol,
-                    StockName = buyOrderRequest.StockName,
-                    Price = buyOrderRequest.Price,
+                    StockSymbol = orderRequest.StockSymbol,
+                    StockName = orderRequest.StockName,
+                    Price = orderRequest.Price,
                 };
                 ViewBag.CurrentPage = "Trade";
 
                 return View("Index", stockTrade);
             }
-            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
+            BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(orderRequest);
 
             return RedirectToAction("Orders");
         }
 
         [HttpPost]
         [Route("[action]")]
-        public async Task<IActionResult> SellOrder(SellOrderRequest sellOrderRequest)
+        public async Task<IActionResult> SellOrder(SellOrderRequest orderRequest)
         {
-            sellOrderRequest.DateTimeOrder = DateTime.Now;
-
-            ModelState.Clear();
-            TryValidateModel(sellOrderRequest);
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).ToList().Select(e => e.ErrorMessage).ToList();
-                StockTrade stockTrade = new StockTrade()
-                {
-                    StockSymbol = sellOrderRequest.StockSymbol,
-                    StockName = sellOrderRequest.StockName,
-                    Price = sellOrderRequest.Price,
-                };
-                ViewBag.CurrentPage = "Trade";
-
-                return View("Index", stockTrade);
-            }
-            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
+            SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(orderRequest);
 
             return RedirectToAction("Orders");
         }

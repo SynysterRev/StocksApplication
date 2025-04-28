@@ -29,5 +29,7 @@ namespace StockAppTests
             document.QuerySelector("#new-order-panel").Should().NotBeNull();
             document.QuerySelector("#new-order-panel").InnerHtml.Should().Contain("New Order");
         }
+
+        //add more test for others actions
     }
 }

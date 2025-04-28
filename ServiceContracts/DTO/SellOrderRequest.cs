@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ServiceContracts.DTO
 {
-    public class SellOrderRequest
+    public class SellOrderRequest : IOrderRequest
     {
         [Required]
         public string StockSymbol { get; set; } = "";
@@ -18,7 +18,7 @@ namespace ServiceContracts.DTO
         public string StockName { get; set; } = "";
 
         [MaxDateValidator("2000-01-01")]
-        public DateTime DateTimeOrder { get; set; }
+        public DateTime DateAndTimeOfOrder { get; set; }
 
         [Range(1, 100000)]
         public uint Quantity { get; set; }
@@ -32,7 +32,7 @@ namespace ServiceContracts.DTO
             {
                 StockSymbol = StockSymbol,
                 StockName = StockName,
-                DateTimeOrder = DateTimeOrder,
+                DateTimeOrder = DateAndTimeOfOrder,
                 Quantity = Quantity,
                 Price = Price
             };

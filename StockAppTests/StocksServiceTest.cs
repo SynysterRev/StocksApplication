@@ -131,7 +131,7 @@ namespace StockAppTests
         public async Task CreateBuyOrder_OlderDateThanAuthorized()
         {
             BuyOrderRequest buyOrderRequest = _fixture.Build<BuyOrderRequest>()
-                .With(x => x.DateTimeOrder, DateTime.Parse("1999-12-31"))
+                .With(x => x!.DateAndTimeOfOrder, DateTime.Parse("1999-12-31"))
                 .Create();
 
             Func<Task> action = async () =>
@@ -259,7 +259,7 @@ namespace StockAppTests
         public async Task CreateSellOrder_OlderDateThanAuthorized()
         {
             SellOrderRequest? sellOrderRequest = _fixture.Build<SellOrderRequest>()
-               .With(x => x.DateTimeOrder, DateTime.Parse("1999-12-31"))
+               .With(x => x!.DateAndTimeOfOrder, DateTime.Parse("1999-12-31"))
                .Create();
 
             Func<Task> action = async () =>
