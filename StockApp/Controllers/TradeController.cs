@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using StockApp.Filters.ActionFilter;
 using StockApp.Models;
 using System.Globalization;
 
@@ -73,25 +74,9 @@ namespace StockApp.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [TypeFilter(typeof(CreateOrderActionFilter))]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest orderRequest)
         {
-            orderRequest!.DateAndTimeOfOrder = DateTime.Now;
-
-            ModelState.Clear();
-            TryValidateModel(orderRequest);
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Errors = ModelState.Values.SelectMany(v => v.Errors).ToList().Select(e => e.ErrorMessage).ToList();
-                StockTrade stockTrade = new StockTrade()
-                {
-                    StockSymbol = orderRequest.StockSymbol,
-                    StockName = orderRequest.StockName,
-                    Price = orderRequest.Price,
-                };
-                ViewBag.CurrentPage = "Trade";
-
-                return View("Index", stockTrade);
-            }
             BuyOrderResponse buyOrderResponse = await _stocksService.CreateBuyOrder(orderRequest);
 
             return RedirectToAction("Orders");
@@ -99,6 +84,7 @@ namespace StockApp.Controllers
 
         [HttpPost]
         [Route("[action]")]
+        [TypeFilter(typeof(CreateOrderActionFilter))]
         public async Task<IActionResult> SellOrder(SellOrderRequest orderRequest)
         {
             SellOrderResponse sellOrderResponse = await _stocksService.CreateSellOrder(orderRequest);

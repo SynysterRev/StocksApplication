@@ -9,14 +9,12 @@ namespace StockApp.Filters.ActionFilter
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            TradeController tradeController = (TradeController)context.Controller;
-            if (tradeController != null)
+            if (context.Controller is TradeController tradeController)
             {
-                IDictionary<string, object?>? parameters = context.HttpContext.Items["arguments"] as IDictionary<string, object?>;
-                if (parameters != null && parameters.ContainsKey("orderRequest"))
-                {
-                    var orderRequest = parameters["orderRequest"] as IOrderRequest;
+                var orderRequest = context.ActionArguments["orderRequest"] as IOrderRequest;
 
+                if (orderRequest != null)
+                {
                     orderRequest!.DateAndTimeOfOrder = DateTime.Now;
 
                     tradeController.ModelState.Clear();
