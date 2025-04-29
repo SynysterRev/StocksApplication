@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using StockApp.Models;
 using System.Globalization;
 
@@ -7,14 +7,19 @@ namespace StockApp.ViewComponents
 {
     public class SelectedStockViewComponent : ViewComponent
     {
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceService;
 
-        public SelectedStockViewComponent(IFinnhubService finnhubService) => _finnhubService = finnhubService;
+        public SelectedStockViewComponent(IFinnhubCompanyProfileService finnhubCompanyProfileService, IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService)
+        {
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
+            _finnhubStockPriceService = finnhubStockPriceQuoteService;
+        }
 
         public async Task<IViewComponentResult> InvokeAsync(string stockSymbol)
         {
-            Dictionary<string, object>? company = await _finnhubService.GetCompanyProfile(stockSymbol);
-            Dictionary<string, object>? stock = await _finnhubService.GetStockPriceQuote(stockSymbol);
+            Dictionary<string, object>? company = await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
+            Dictionary<string, object>? stock = await _finnhubStockPriceService.GetStockPriceQuote(stockSymbol);
 
             if (company != null && stock != null)
             {
@@ -25,7 +30,7 @@ namespace StockApp.ViewComponents
                 ViewBag.Exchange = company["exchange"];
                 ViewBag.Price = Convert.ToDouble(stock["c"].ToString(), CultureInfo.InvariantCulture);
             }
-            
+
             return View();
         }
     }

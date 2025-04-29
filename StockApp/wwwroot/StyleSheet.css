@@ -791,7 +791,7 @@ a.button-link:link, a.button-link:visited
     #new-order-panel
     {
         padding-left: 90px;
-        padding-top: 220px;
+        /*padding-top: 220px;*/
         flex: 1 0 auto;
     }
 

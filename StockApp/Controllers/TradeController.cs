@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using ServiceContracts;
 using ServiceContracts.DTO;
+using ServiceContracts.FinnhubService;
 using StockApp.Filters.ActionFilter;
 using StockApp.Models;
 using System.Globalization;
@@ -14,14 +15,16 @@ namespace StockApp.Controllers
     {
         private readonly IOptions<TradingOptions> _tradingOptions;
         private readonly IStocksService _stocksService;
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStockPriceQuoteService _finnhubStockPriceQuoteService;
+        private readonly IFinnhubCompanyProfileService _finnhubCompanyProfileService;
         private readonly IConfiguration _configuration;
 
-        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService,
-            IStocksService stocksService, IConfiguration configuration)
+        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubStockPriceQuoteService finnhubStockPriceQuoteService,
+            IFinnhubCompanyProfileService finnhubCompanyProfileService, IStocksService stocksService, IConfiguration configuration)
         {
             _tradingOptions = tradingOptions;
-            _finnhubService = finnhubService;
+            _finnhubStockPriceQuoteService = finnhubStockPriceQuoteService;
+            _finnhubCompanyProfileService = finnhubCompanyProfileService;
             _stocksService = stocksService;
             _configuration = configuration;
         }
@@ -39,8 +42,8 @@ namespace StockApp.Controllers
             {
                 return Content("The token is not set");
             }
-            Dictionary<string, object>? companyProfileDic = await _finnhubService.GetCompanyProfile(stockSymbol);
-            Dictionary<string, object>? stockDic = await _finnhubService.GetStockPriceQuote(stockSymbol);
+            Dictionary<string, object>? companyProfileDic = await _finnhubCompanyProfileService.GetCompanyProfile(stockSymbol);
+            Dictionary<string, object>? stockDic = await _finnhubStockPriceQuoteService.GetStockPriceQuote(stockSymbol);
 
             if (companyProfileDic == null || stockDic == null)
             {

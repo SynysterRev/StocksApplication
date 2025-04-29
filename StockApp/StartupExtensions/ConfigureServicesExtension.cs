@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using Services;
+using Services.FinnhubService;
 using StockApp.Middlewares;
 
 namespace StockApp
@@ -17,11 +19,14 @@ namespace StockApp
 
             builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
             builder.Services.AddScoped<IStocksService, StocksService>();
-            builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+            builder.Services.AddScoped<IFinnhubCompanyProfileService, FinnhubCompanyProfileService>();
+            builder.Services.AddScoped<IFinnhubStocksService, FinnhubStocksService>();
+            builder.Services.AddScoped<IFinnhubSearchStocksService, FinnhubSearchStocksService>();
+            builder.Services.AddScoped<IFinnhubStockPriceQuoteService, FinnhubStockPriceQuoteService>();
             builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
             builder.Services.AddScoped<IStocksRepository, StocksRepository>();
 
-            builder.Services.AddTransient<ExceptionHandlingMiddleware>();
+            //builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
             if (!builder.Environment.IsEnvironment("Test"))
             {

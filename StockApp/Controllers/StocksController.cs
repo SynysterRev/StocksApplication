@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using StockApp.Models;
 using System.Linq;
 
@@ -9,11 +9,11 @@ namespace StockApp.Controllers
     [Route("[controller]")]
     public class StocksController : Controller
     {
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStocksService _finnhubStocksService;
         private readonly IOptions<TradingOptions> _tradingOptions;
-        public StocksController(IFinnhubService finnhubService, IOptions<TradingOptions> tradingOptions)
+        public StocksController(IFinnhubStocksService finnhubStocksService, IOptions<TradingOptions> tradingOptions)
         {
-            _finnhubService = finnhubService;
+            _finnhubStocksService = finnhubStocksService;
             _tradingOptions = tradingOptions;
         }
 
@@ -23,7 +23,7 @@ namespace StockApp.Controllers
         [Route("[action]/{stock?}")]
         public async Task<IActionResult> Explore(string? stock)
         {
-            List<Dictionary<string, string>>? stocksListDic = await _finnhubService.GetStocks();
+            List<Dictionary<string, string>>? stocksListDic = await _finnhubStocksService.GetStocks();
             if (stocksListDic == null)
             {
                 return StatusCode(500, "Can't access finnhub servers");

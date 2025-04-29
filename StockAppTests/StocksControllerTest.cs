@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
 using RepositoryContracts;
-using ServiceContracts;
+using ServiceContracts.FinnhubService;
 using Services;
 using StockApp;
 using StockApp.Controllers;
@@ -20,7 +20,7 @@ namespace StockAppTests
 {
     public class StocksControllerTest
     {
-        private readonly IFinnhubService _finnhubService;
+        private readonly IFinnhubStocksService _finnhubStocksService;
         private readonly Mock<IFinnhubRepository> _finnhubRepositoryMock;
         private readonly IFinnhubRepository _finnhubRepository;
 
@@ -30,7 +30,7 @@ namespace StockAppTests
         {
             _finnhubRepositoryMock = new Mock<IFinnhubRepository>();
             _finnhubRepository = _finnhubRepositoryMock.Object;
-            _finnhubService = new FinnhubService(_finnhubRepository);
+            _finnhubStocksService = new FinnhubStocksService(_finnhubRepository);
             _fixture = new Fixture();
         }
 
@@ -44,7 +44,7 @@ namespace StockAppTests
             });
 
             _finnhubRepositoryMock.Setup(temp => temp.GetStocks()).ReturnsAsync(null as List<Dictionary<string, string>>);
-            StocksController stocksController = new StocksController(_finnhubService, tradingOptions);
+            StocksController stocksController = new StocksController(_finnhubStocksService, tradingOptions);
 
             IActionResult result = await stocksController.Explore(null);
 
@@ -76,7 +76,7 @@ namespace StockAppTests
                 _fixture.Build<Stock>().With(x => x.StockSymbol, "MSFT").With(x => x.StockName, "Microsoft Corporation").Create(),
                 _fixture.Build<Stock>().With(x => x.StockSymbol, "GOOGL").With(x => x.StockName, "Alphabet Inc.").Create(),
             };
-            StocksController stocksController = new StocksController(_finnhubService, tradingOptions);
+            StocksController stocksController = new StocksController(_finnhubStocksService, tradingOptions);
 
             IActionResult result = await stocksController.Explore(null);
 
@@ -110,7 +110,7 @@ namespace StockAppTests
                 _fixture.Build<Stock>().With(x => x.StockSymbol, "MSFT").With(x => x.StockName, "Microsoft Corporation").Create(),
                 _fixture.Build<Stock>().With(x => x.StockSymbol, "GOOGL").With(x => x.StockName, "Alphabet Inc.").Create(),
             };
-            StocksController stocksController = new StocksController(_finnhubService, tradingOptions);
+            StocksController stocksController = new StocksController(_finnhubStocksService, tradingOptions);
 
             IActionResult result = await stocksController.Explore("AAPL");
 

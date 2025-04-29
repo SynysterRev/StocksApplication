@@ -35,7 +35,7 @@ if (builder.Environment.IsDevelopment())
 else
 {
     app.UseExceptionHandler("/Home/Error");
-    app.UseExceptionHandlingMiddleware();
+    app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
 
 
