@@ -4,6 +4,7 @@ using Repositories;
 using RepositoryContracts;
 using ServiceContracts;
 using Services;
+using StockApp.Middlewares;
 
 namespace StockApp
 {
@@ -13,11 +14,14 @@ namespace StockApp
         {
             builder.Services.AddControllersWithViews();
             builder.Services.AddHttpClient();
+
             builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
             builder.Services.AddScoped<IStocksService, StocksService>();
             builder.Services.AddScoped<IFinnhubService, FinnhubService>();
             builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
             builder.Services.AddScoped<IStocksRepository, StocksRepository>();
+
+            builder.Services.AddTransient<ExceptionHandlingMiddleware>();
 
             if (!builder.Environment.IsEnvironment("Test"))
             {
