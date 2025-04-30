@@ -1,7 +1,5 @@
 using Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Repositories;
 using RepositoryContracts;
 using Serilog;
 using ServiceContracts;
