@@ -10,14 +10,14 @@
 	<div class="box stocks-list">
 		<div class="flex m">
 			<h3 class="text-grey mt flex-1">Stocks</h3>
-			<a class="mt flex-1 text-right" href="">Show all stocks</a>
+			<a class="mt flex-1 text-right" asp-controller="stocks" asp-action="explore" asp-route-showAll="true">Show all stocks</a>
 		</div>
 		<div class="list-container stocks-list" id="stocks-list">
 			<ul class="list m">
 				@foreach (Stock stock in Model)
 				{
 					<li>
-						<a asp-controller="Stocks" asp-action="Explore" asp-route-stock="@stock.StockSymbol">
+						<a asp-controller="Stocks" asp-action="Explore" asp-route-stock="@stock.StockSymbol" asp-route-showAll="@(Context.Request.Query["showAll"])">
 							<h2>@stock.StockName</h2>
 							<h4 class="text-grey">(@stock.StockSymbol)</h4>
 						</a>

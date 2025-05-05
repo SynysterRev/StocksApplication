@@ -21,12 +21,12 @@ namespace StockApp.UI.ViewComponents
             Dictionary<string, object>? stock = await _finnhubStockPriceService.GetStockPriceQuote(stockSymbol);
 
             if (company != null && stock != null)
-            {
-                ViewBag.Image = company["logo"];
+            {              
+                ViewBag.Image = company.ContainsKey("logo") ? company["logo"] : "";
                 ViewBag.StockSymbol = stockSymbol;
-                ViewBag.StockName = company["name"];
-                ViewBag.Industry = company["finnhubIndustry"];
-                ViewBag.Exchange = company["exchange"];
+                ViewBag.StockName = company.ContainsKey("name") ? company["name"] : "";
+                ViewBag.Industry = company.ContainsKey("finnhubIndustry") ? company["finnhubIndustry"] : "";
+                ViewBag.Exchange = company.ContainsKey("exchange") ? company["exchange"] : "";
                 ViewBag.Price = Convert.ToDouble(stock["c"].ToString(), CultureInfo.InvariantCulture);
             }
 

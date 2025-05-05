@@ -24,6 +24,8 @@ namespace StockApp.UI.StartupExtensions
             });
             builder.Services.AddHttpClient();
 
+            builder.Services.AddSession();
+
             builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
             builder.Services.AddScoped<IStocksService, StocksService>();
             builder.Services.AddScoped<IFinnhubCompanyProfileService, FinnhubCompanyProfileService>();

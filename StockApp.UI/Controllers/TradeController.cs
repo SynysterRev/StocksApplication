@@ -37,7 +37,8 @@ namespace StockApp.UI.Controllers
         {
             if (string.IsNullOrEmpty(stockSymbol))
             {
-                stockSymbol = "MSFT";
+                var lastStockSymbol = HttpContext.Session.GetString("lastStockSymbol");
+                stockSymbol = lastStockSymbol ?? "MSFT";
             }
             string? token = _configuration["finnhubtoken"];
             if (string.IsNullOrEmpty(token))
