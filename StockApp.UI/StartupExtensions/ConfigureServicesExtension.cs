@@ -52,6 +52,12 @@ namespace StockApp.UI.StartupExtensions
             services.AddAuthorization(options =>
             {
                 options.FallbackPolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+                options.AddPolicy("NotAuthenticated", options =>
+                {
+                    options.RequireAssertion(context =>
+                        context.User.Identity is not null && !context.User.Identity.IsAuthenticated);
+                });
             });
 
             services.ConfigureApplicationCookie(options =>

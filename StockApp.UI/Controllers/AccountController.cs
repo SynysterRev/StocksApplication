@@ -7,7 +7,7 @@ using StockApp.Core.DTO;
 namespace StockApp.UI.Controllers
 {
     [Route("[controller]")]
-    [AllowAnonymous]
+    //[AllowAnonymous]
     public class AccountController : Controller
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -21,6 +21,7 @@ namespace StockApp.UI.Controllers
 
         [Route("[action]")]
         [HttpGet]
+        [Authorize(Policy = "NotAuthenticated")]
         public IActionResult Register()
         {
             return View();
@@ -28,6 +29,7 @@ namespace StockApp.UI.Controllers
 
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Policy = "NotAuthenticated")]
         public async Task<IActionResult> Register(UserRegister userRegister)
         {
             if (!ModelState.IsValid)
@@ -62,6 +64,7 @@ namespace StockApp.UI.Controllers
 
         [Route("[action]")]
         [HttpGet]
+        [Authorize(Policy = "NotAuthenticated")]
         public IActionResult Login()
         {
             return View();
@@ -69,6 +72,7 @@ namespace StockApp.UI.Controllers
 
         [Route("[action]")]
         [HttpPost]
+        [Authorize(Policy = "NotAuthenticated")]
         public async Task<IActionResult> Login(UserLogin userLogin, string? returnUrl)
         {
             if (!ModelState.IsValid)
