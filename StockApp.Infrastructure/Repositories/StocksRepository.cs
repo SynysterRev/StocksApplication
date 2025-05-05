@@ -1,8 +1,9 @@
-﻿using Entities;
-using RepositoryContracts;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using StockApp.Core.Domain.Entities;
+using StockApp.Core.Domain.RepositoryContracts;
+using StockApp.Infrastructure.DbContext;
 
-namespace Repositories
+namespace StockApp.Infrastructure.Repositories
 {
     public class StocksRepository : IStocksRepository
     {

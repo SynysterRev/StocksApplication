@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using RepositoryContracts;
+using StockApp.Core.Domain.RepositoryContracts;
 using System.Text.Json;
 
-namespace Repositories
+namespace StockApp.Infrastructure.Repositories
 {
     public class FinnhubRepository : IFinnhubRepository
     {
@@ -101,9 +101,9 @@ namespace Repositories
                 if (listContent == null)
                     throw new InvalidOperationException("No response from server");
 
-                foreach(var item in listContent)
+                foreach (var item in listContent)
                 {
-                   if (item.ContainsKey("error"))
+                    if (item.ContainsKey("error"))
                         throw new InvalidOperationException(Convert.ToString(item["error"]));
                 }
 

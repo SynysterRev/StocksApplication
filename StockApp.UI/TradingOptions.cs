@@ -1,4 +1,4 @@
-﻿namespace StockApp
+﻿namespace StockApp.UI
 {
     public class TradingOptions
     {

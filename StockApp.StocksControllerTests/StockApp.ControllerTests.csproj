@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StockApp\StockApp.UI.csproj" />
+    <ProjectReference Include="..\StockApp.UI\StockApp.UI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

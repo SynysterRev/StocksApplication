@@ -1,12 +1,6 @@
-﻿using Entities;
-using ServiceContracts.DTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using StockApp.Core.Domain.Entities;
 
-namespace RepositoryContracts
+namespace StockApp.Core.Domain.RepositoryContracts
 {
     public interface IStocksRepository
     {

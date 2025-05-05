@@ -24,7 +24,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<InternalsVisibleTo Include="StockApp.IntegrationTests"/>
+		<InternalsVisibleTo Include="StockApp.IntegrationTests" />
 	</ItemGroup>
 
 </Project>

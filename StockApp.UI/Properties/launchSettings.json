@@ -8,7 +8,7 @@
         "finnhubtoken": "cvlakjhr01qj3umc78hgcvlakjhr01qj3umc78i0"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "http://localhost:5062"
+      "applicationUrl": "https://localhost:5062"
     },
     "IIS Express": {
       "commandName": "IISExpress",
@@ -23,7 +23,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:28806",
+      "applicationUrl": "https://localhost:28806",
       "sslPort": 0
     }
   }

@@ -1,9 +1,8 @@
-﻿using ServiceContracts;
-using RepositoryContracts;
-using ServiceContracts.FinnhubService;
-using Exceptions;
+﻿using StockApp.Core.Domain.RepositoryContracts;
+using StockApp.Core.Exceptions;
+using StockApp.Core.ServiceContracts.FinnhubService;
 
-namespace Services
+namespace StockApp.Core.Services.FinnhubService
 {
     public class FinnhubStockPriceQuoteService : IFinnhubStockPriceQuoteService
     {

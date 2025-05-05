@@ -1,10 +1,10 @@
-﻿using Entities;
-using RepositoryContracts;
-using ServiceContracts;
-using ServiceContracts.DTO;
+﻿using StockApp.Core.Domain.Entities;
+using StockApp.Core.Domain.RepositoryContracts;
+using StockApp.Core.DTO;
 using StockApp.Core.Helpers;
+using StockApp.Core.ServiceContracts;
 
-namespace Services
+namespace StockApp.Core.Services
 {
     public class StocksService : IStocksService
     {

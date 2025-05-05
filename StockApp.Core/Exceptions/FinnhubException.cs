@@ -1,4 +1,4 @@
-﻿namespace Exceptions
+﻿namespace StockApp.Core.Exceptions
 {
     public class FinnhubException : Exception
     {

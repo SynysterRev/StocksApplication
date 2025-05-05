@@ -1,4 +1,4 @@
-﻿namespace StockApp.Models
+﻿namespace StockApp.UI.Models
 {
     public class StockTrade
     {

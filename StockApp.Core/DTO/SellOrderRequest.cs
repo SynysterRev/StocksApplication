@@ -1,13 +1,8 @@
-﻿using Entities;
+﻿using StockApp.Core.Domain.Entities;
 using StockApp.Core.Validators;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ServiceContracts.DTO
+namespace StockApp.Core.DTO
 {
     public class SellOrderRequest : IOrderRequest
     {

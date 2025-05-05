@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\StockApp.UI\StockApp.UI.csproj" />
     <ProjectReference Include="..\StockApp\StockApp.UI.csproj" />
   </ItemGroup>
 

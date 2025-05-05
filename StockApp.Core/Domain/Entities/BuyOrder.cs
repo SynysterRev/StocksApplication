@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities
+namespace StockApp.Core.Domain.Entities
 {
     public class BuyOrder
     {

@@ -1,4 +1,4 @@
-﻿namespace RepositoryContracts
+﻿namespace StockApp.Core.Domain.RepositoryContracts
 {
     public interface IFinnhubRepository
     {

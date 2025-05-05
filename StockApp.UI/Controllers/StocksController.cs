@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ServiceContracts.FinnhubService;
-using StockApp.Models;
-using System.Linq;
+using StockApp.Core.ServiceContracts.FinnhubService;
+using StockApp.UI.Models;
 
-namespace StockApp.Controllers
+namespace StockApp.UI.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class StocksController : Controller
     {
         private readonly IFinnhubStocksService _finnhubStocksService;

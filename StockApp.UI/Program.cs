@@ -1,11 +1,6 @@
-using Entities;
-using Microsoft.Extensions.DependencyInjection;
-using RepositoryContracts;
 using Serilog;
-using ServiceContracts;
-using Services;
-using StockApp;
-using StockApp.Middlewares;
+using StockApp.UI.Middlewares;
+using StockApp.UI.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,9 +31,13 @@ else
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
 
+app.UseHsts();
+app.UseHttpsRedirection();
 
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 

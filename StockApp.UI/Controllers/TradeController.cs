@@ -1,16 +1,18 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using ServiceContracts.FinnhubService;
-using StockApp.Filters.ActionFilter;
-using StockApp.Models;
+using StockApp.Core.DTO;
+using StockApp.Core.ServiceContracts;
+using StockApp.Core.ServiceContracts.FinnhubService;
+using StockApp.UI.Filters.ActionFilter;
+using StockApp.UI.Models;
 using System.Globalization;
 
-namespace StockApp.Controllers
+namespace StockApp.UI.Controllers
 {
     [Route("[controller]")]
+    [Authorize]
     public class TradeController : Controller
     {
         private readonly IOptions<TradingOptions> _tradingOptions;

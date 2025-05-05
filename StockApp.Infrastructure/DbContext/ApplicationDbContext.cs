@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Data.SqlClient;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using StockApp.Core.Domain.Entities;
+using StockApp.Core.Domain.IdentityEntities;
 
-namespace Entities
+namespace StockApp.Infrastructure.DbContext
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>
     {
         public DbSet<BuyOrder> BuyOrders { get; set; }
         public DbSet<SellOrder> SellOrders { get; set; }

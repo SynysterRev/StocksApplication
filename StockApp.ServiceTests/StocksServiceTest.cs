@@ -1,16 +1,16 @@
 using AutoFixture;
-using Entities;
 using FluentAssertions;
 using Moq;
-using RepositoryContracts;
-using ServiceContracts;
-using ServiceContracts.DTO;
-using Services;
+using StockApp.Core.Domain.Entities;
+using StockApp.Core.Domain.RepositoryContracts;
+using StockApp.Core.DTO;
+using StockApp.Core.ServiceContracts;
+using StockApp.Core.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using Xunit.Abstractions;
 
-namespace StockAppTests
+namespace StockApp.ServiceTests
 {
     public class StocksServiceTest
     {

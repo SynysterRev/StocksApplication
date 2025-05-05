@@ -1,12 +1,12 @@
-﻿using Entities;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestPlatform.TestHost;
+using StockApp.Infrastructure.DbContext;
 
-namespace StockAppTests
+namespace StockApp.IntegrationTests
 {
     public class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
@@ -16,7 +16,8 @@ namespace StockAppTests
 
             builder.UseEnvironment("Test");
 
-            builder.ConfigureServices(services => {
+            builder.ConfigureServices(services =>
+            {
                 var descripter = services.SingleOrDefault(temp => temp.ServiceType == typeof(DbContextOptions<ApplicationDbContext>));
 
                 if (descripter != null)

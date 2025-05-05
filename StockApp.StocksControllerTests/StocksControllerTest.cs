@@ -3,20 +3,14 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
-using RepositoryContracts;
-using ServiceContracts.FinnhubService;
-using Services;
-using StockApp;
-using StockApp.Controllers;
-using StockApp.Models;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using StockApp.Core.Domain.RepositoryContracts;
+using StockApp.Core.ServiceContracts.FinnhubService;
+using StockApp.Core.Services.FinnhubService;
+using StockApp.UI;
+using StockApp.UI.Controllers;
+using StockApp.UI.Models;
 
-namespace StockAppTests
+namespace StockApp.ControllerTests
 {
     public class StocksControllerTest
     {

@@ -5,8 +5,8 @@
 	<meta name="viewport" content="width=device-width" />
 	<title>@ViewBag.Title</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-		  integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
-		  crossorigin="anonymous" referrerpolicy="no-referrer" />
+	integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+	crossorigin="anonymous" referrerpolicy="no-referrer" />
 	<link href="~/StyleSheet.css" rel="stylesheet" />
 </head>
 <body>
@@ -23,8 +23,16 @@
 
 					<div class="flex-1 pr" id="search-box-div">
 						<input type="search" placeholder="Search Stocks" name="SearchText" id="search-stocks" class="search-text" />
-						<i class="fa-solid fa-gear pt"></i>
-						<button class="button-blue-back login-button button ml">Login</button>
+						@if(User.Identity != null && User.Identity.IsAuthenticated)
+						{
+							<span>@User.Identity.Name</span>
+							<a class="button-blue-back login-button button-link ml" asp-controller="account" asp-action="logout">Logout</a>
+						}
+						else
+						{
+							<a class="button-blue-back login-button button-link ml" asp-controller="account" asp-action="register">Register</a>
+							<a class="button-blue-back login-button button-link ml" asp-controller="account" asp-action="login">Login</a>
+						}
 					</div>
 
 				</div>

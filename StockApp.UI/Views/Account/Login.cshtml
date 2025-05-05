@@ -1,0 +1,58 @@
+﻿@model UserLogin
+@{
+	ViewBag.Title = "Login";
+}
+
+<div class="form-container">
+	Not registered ? <a asp-controller="account" asp-action="register" class="link-hover">Login</a>
+	<form asp-controller="account" asp-action="login" method="post">
+		<h2 class="text-large">Login</h2>
+		<div class="form-field flex">
+			<div class="w-25">
+				<label class="form-label" asp-for="Email">Email</label>
+			</div>
+			<div class="flex-1">
+				<input class="form-input" asp-for="Email" />
+				<span asp-validation-for="Email" class="text-red"></span>
+			</div>
+		</div>
+		<div class="form-field flex">
+			<div class="w-25">
+				<label class="form-label" asp-for="Password">Password</label>
+			</div>
+			<div class="flex-1">
+				<input class="form-input" asp-for="Password" />
+				<span asp-validation-for="Password" class="text-red"></span>
+			</div>
+		</div>
+		<div class="form-field flex">
+			<div class="w-25">
+			</div>
+			<div class="flex-1">
+				<button type="submit" class="button-green-back button">Login</button>
+
+				<div asp-validation-summary="All" class="text-red"></div>
+				@if (ViewBag.Errors != null)
+				{
+					<div class="text-red ml">
+						<ul>
+							@foreach (var error in ViewBag.Errors)
+							{
+								<li class="text-red">@error</li>
+							}
+						</ul>
+					</div>
+				}
+			</div>
+		</div>
+	</form>
+</div>
+
+@section scripts
+{
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="~/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator"
+			asp-fallback-src="~/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobtrusive"
+			asp-fallback-src="~/jquery.validate.unobtrusive.min.js"></script>
+}

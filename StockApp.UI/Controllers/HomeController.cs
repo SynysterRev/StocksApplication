@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace StockApp.Controllers
+namespace StockApp.UI.Controllers
 {
     [Route("[controller]")]
     public class HomeController : Controller
